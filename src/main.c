@@ -62,6 +62,12 @@ void launch_effect(int effect);      /* Launch an effect. */
  * This buffer design was chosen to have code compatability with a 8x8x8 cube.
  * "volatile" makes the variables reachable from within the interrupt functions
  */
+
+// (Mike) - Assuming:  cube[z][y] = x   then z is vertical axis, y is width and
+//          x = LEDs shining along that 3rd axis. Lit LEDs will match the bit
+//          pattern of the binary x value (0=all off, 1 = off|off|off|on,
+//          10 = on|off|on|off and so on
+
 volatile unsigned char cube[4][4];
 
 /* 
