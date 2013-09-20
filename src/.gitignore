@@ -1,6 +1,5 @@
 # My local stuff #
 ##################
-do.sh
 *.eep
 *.elf
 *.hex
