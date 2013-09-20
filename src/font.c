@@ -14,9 +14,15 @@
 
 // Text library for 4x5 vertically scrolling font
 
-const unsigned char font[2][4] PROGMEM =                //94 counting lowercase, upper, nums, and all punct
+// making this a x5 array means that each horiz font line
+// already conforms to the existing way that lines are drawn
+// in frames, without the need to bitshift even/odd lines.
+// Each value corresponds with the pixels on a horiz. line of
+// the character.
+
+const unsigned char font[2][5] PROGMEM =       //94 counting lowercase, upper, nums, and all punct
 {
-	{ 0x0f, 0x13, 0x13, 0x0f },        // A
-	{ 0x1f, 0x15, 0x15, 0x10 },        // B
+	{ 0x06, 0x09, 0x0f, 0x09, 0x09 },        // A
+	{ 0x0e, 0x09, 0x0e, 0x09, 0x0e },        // B
 };
 
