@@ -23,14 +23,15 @@
 // Each value corresponds with the pixels on a horiz. line of
 // the character. The final line is always 0 so there's a natural
 // break when scrolling words
+#include <string.h>
 
-void scroll_char_x(const char, int);
+void scroll_char_x(const char, int, int);
+void scroll_string_x(const char*, int, int);
 
 //95 printable ascii characters counting lowercase, upper, nums, and all punct
 //
 const unsigned char font[95][6] PROGMEM =
 {
-//	{ 0x0, 0x0, 0x0, 0x0, 0x0, 0x00 },        //
 	{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },        // space
 	{ 0x02, 0x02, 0x02, 0x00, 0x02, 0x00 },        //   !
 	{ 0x00, 0x05, 0x00, 0x00, 0x00, 0x00 },        //   "
@@ -129,7 +130,8 @@ const unsigned char font[95][6] PROGMEM =
 
 };
 
-void scroll_char_x(const char mychar, int delay)
+//scrolls a character along the x axis
+void scroll_char_x(const char mychar, int delay, int level)
 {
     int fontchar;
     fontchar = (int)mychar - 32;
@@ -138,38 +140,86 @@ void scroll_char_x(const char mychar, int delay)
     if (fontchar < 0 || fontchar > 94)
         fontchar = 0;
 
-    cube[0][0] = pgm_read_byte(&font[fontchar][0]);
+    cube[level][0] = pgm_read_byte(&font[fontchar][0]);
     delay_ms(delay);
-    cube[0][1] = pgm_read_byte(&font[fontchar][0]);
-    cube[0][0] = pgm_read_byte(&font[fontchar][1]);
+    cube[level][1] = pgm_read_byte(&font[fontchar][0]);
+    cube[level][0] = pgm_read_byte(&font[fontchar][1]);
     delay_ms(delay);
-    cube[0][2] = pgm_read_byte(&font[fontchar][0]);
-    cube[0][1] = pgm_read_byte(&font[fontchar][1]);
-    cube[0][0] = pgm_read_byte(&font[fontchar][2]);
+    cube[level][2] = pgm_read_byte(&font[fontchar][0]);
+    cube[level][1] = pgm_read_byte(&font[fontchar][1]);
+    cube[level][0] = pgm_read_byte(&font[fontchar][2]);
     delay_ms(delay);
-    cube[0][3] = pgm_read_byte(&font[fontchar][0]);
-    cube[0][2] = pgm_read_byte(&font[fontchar][1]);
-    cube[0][1] = pgm_read_byte(&font[fontchar][2]);
-    cube[0][0] = pgm_read_byte(&font[fontchar][3]);
+    cube[level][3] = pgm_read_byte(&font[fontchar][0]);
+    cube[level][2] = pgm_read_byte(&font[fontchar][1]);
+    cube[level][1] = pgm_read_byte(&font[fontchar][2]);
+    cube[level][0] = pgm_read_byte(&font[fontchar][3]);
     delay_ms(delay);
-    cube[0][3] = pgm_read_byte(&font[fontchar][1]);
-    cube[0][2] = pgm_read_byte(&font[fontchar][2]);
-    cube[0][1] = pgm_read_byte(&font[fontchar][3]);
-    cube[0][0] = pgm_read_byte(&font[fontchar][4]);
+    cube[level][3] = pgm_read_byte(&font[fontchar][1]);
+    cube[level][2] = pgm_read_byte(&font[fontchar][2]);
+    cube[level][1] = pgm_read_byte(&font[fontchar][3]);
+    cube[level][0] = pgm_read_byte(&font[fontchar][4]);
     delay_ms(delay);
-    cube[0][3] = pgm_read_byte(&font[fontchar][2]);
-    cube[0][2] = pgm_read_byte(&font[fontchar][3]);
-    cube[0][1] = pgm_read_byte(&font[fontchar][4]);
-    cube[0][0] = pgm_read_byte(&font[fontchar][5]);
+    cube[level][3] = pgm_read_byte(&font[fontchar][2]);
+    cube[level][2] = pgm_read_byte(&font[fontchar][3]);
+    cube[level][1] = pgm_read_byte(&font[fontchar][4]);
+    cube[level][0] = pgm_read_byte(&font[fontchar][5]);
     delay_ms(delay);
-    cube[0][3] = pgm_read_byte(&font[fontchar][3]);
-    cube[0][2] = pgm_read_byte(&font[fontchar][4]);
-    cube[0][1] = pgm_read_byte(&font[fontchar][5]);
+    cube[level][3] = pgm_read_byte(&font[fontchar][3]);
+    cube[level][2] = pgm_read_byte(&font[fontchar][4]);
+    cube[level][1] = pgm_read_byte(&font[fontchar][5]);
     delay_ms(delay);
-    cube[0][3] = pgm_read_byte(&font[fontchar][4]);
-    cube[0][2] = pgm_read_byte(&font[fontchar][5]);
+    cube[level][3] = pgm_read_byte(&font[fontchar][4]);
+    cube[level][2] = pgm_read_byte(&font[fontchar][5]);
     delay_ms(delay);
-    cube[0][3] = pgm_read_byte(&font[fontchar][5]);
+    cube[level][3] = pgm_read_byte(&font[fontchar][5]);
     delay_ms(delay);
+
+}
+
+// this will scroll a text string along the x axis
+// remember to add an extra space at the front or the back if it will repeat
+// or else the string will jam together
+//
+void scroll_string_x(const char* mystring, int delay, int level)
+{
+    int size;
+    int y;
+    size = strlen(mystring);
+    
+    //use array
+    clear_x_plane(level);
+    for (y = 0; y < size; y++)
+    {
+        cube[level][3] = cube[level][2];
+        cube[level][2] = cube[level][1];
+        cube[level][1] = cube[level][0];
+        cube[level][0] = pgm_read_byte(&font[(((int)mystring[y])-32)][0]);
+        delay_ms(delay);
+        cube[level][3] = cube[level][2];
+        cube[level][2] = cube[level][1];
+        cube[level][1] = pgm_read_byte(&font[(((int)mystring[y])-32)][0]);
+        cube[level][0] = pgm_read_byte(&font[(((int)mystring[y])-32)][1]);
+        delay_ms(delay);
+        cube[level][3] = cube[level][2];
+        cube[level][2] = pgm_read_byte(&font[(((int)mystring[y])-32)][0]);
+        cube[level][1] = pgm_read_byte(&font[(((int)mystring[y])-32)][1]);
+        cube[level][0] = pgm_read_byte(&font[(((int)mystring[y])-32)][2]);
+        delay_ms(delay);
+        cube[level][3] = pgm_read_byte(&font[(((int)mystring[y])-32)][0]);
+        cube[level][2] = pgm_read_byte(&font[(((int)mystring[y])-32)][1]);
+        cube[level][1] = pgm_read_byte(&font[(((int)mystring[y])-32)][2]);
+        cube[level][0] = pgm_read_byte(&font[(((int)mystring[y])-32)][3]);
+        delay_ms(delay);
+        cube[level][3] = pgm_read_byte(&font[(((int)mystring[y])-32)][1]);
+        cube[level][2] = pgm_read_byte(&font[(((int)mystring[y])-32)][2]);
+        cube[level][1] = pgm_read_byte(&font[(((int)mystring[y])-32)][3]);
+        cube[level][0] = pgm_read_byte(&font[(((int)mystring[y])-32)][4]);
+        delay_ms(delay);
+        cube[level][3] = pgm_read_byte(&font[(((int)mystring[y])-32)][2]);
+        cube[level][2] = pgm_read_byte(&font[(((int)mystring[y])-32)][3]);
+        cube[level][1] = pgm_read_byte(&font[(((int)mystring[y])-32)][4]);
+        cube[level][0] = pgm_read_byte(&font[(((int)mystring[y])-32)][5]);
+        delay_ms(delay);
+    }
 
 }
