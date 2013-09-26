@@ -27,6 +27,7 @@
 
 void scroll_char_x(const char, int, int);
 void scroll_string_x(const char*, int, int);
+int check_level(int);
 
 //95 printable ascii characters counting lowercase, upper, nums, and all punct
 //
@@ -130,11 +131,22 @@ const unsigned char font[95][6] PROGMEM =
 
 };
 
+int check_level(int level)
+{
+    if (level < 0 || level > 3)
+        return 0;
+    else
+        return 1;
+}
+
 //scrolls a character along the x axis
 void scroll_char_x(const char mychar, int delay, int level)
 {
     int fontchar;
     fontchar = (int)mychar - 32;
+    
+    if (!check_level(level))
+        level = 0;
     
     //default to a space if outside the range of the array
     if (fontchar < 0 || fontchar > 94)
@@ -185,6 +197,9 @@ void scroll_string_x(const char* mystring, int delay, int level)
     int size;
     int y;
     size = strlen(mystring);
+    
+    if (!check_level(level))
+        level = 0;
     
     //use array
     clear_x_plane(level);
