@@ -1,4 +1,4 @@
-/* 
+/*
  * 4x4x4 LED Cube project
  * By Christian Moen 2008
  * chr@syntaks.org
@@ -7,33 +7,30 @@
  * Low level graphic functions
  */
 
-void set_voxel(int x, int y, int z);
-void clear_voxel(int x, int y, int z);
-unsigned char get_voxel(int x, int y, int z);
-unsigned char in_range(int x, int y, int z);
-void flip_voxel(int x, int y, int z);
-void alter_voxel(int x, int y, int z, int state);
-void set_z_plane(int z);
-void clear_z_plane(int z);
-void set_x_plane(int x);
-void clear_x_plane(int x);
-void set_y_plane(int y);
-void clear_y_plane_y(int y);
-void set_plane(unsigned char plane, int i, int state);
-void set_z_line(int x, int y, int z1, int z2);
-void set_x_line(int z, int y, int x1, int x2);
-void set_y_line(int z, int x, int y1, int y2);
-void clear_z_line(int x, int y, int z1, int z2);
-void clear_x_line(int z, int y, int x1, int x2);
-void clear_y_line(int z, int x, int y1, int y2);
-void draw_line_plane(int x2, int y2, int x1, int y1,unsigned char anchor);
-void fill(unsigned char pattern);
+void set_voxel(int, int, int);
+void clear_voxel(int, int, int);
+unsigned char get_voxel(int, int, int);
+unsigned char in_range(int, int, int);
+void alter_voxel(int, int, int, int);
+void flip_voxel(int, int, int);
+void set_z_plane(int);
+void clear_z_plane(int);
+void set_x_plane(int);
+void clear_x_plane(int);
+void set_y_plane(int);
+void clear_y_plane_y(int);
+void set_plane(unsigned char, int, int);
+void set_z_line(int, int, int, int, int);
+void set_x_line(int, int, int, int, int);
+void set_y_line(int, int, int, int, int);
+void draw_line_plane(int, int, int, int, unsigned char);
 void tmp_to_cube(void);
 void cube_to_tmp(void);
+void fill(unsigned char);
 
 
 /* 
- * Set a voxel in the cube buffer. 
+ * Set a voxel in the cube buffer.
  */
 void set_voxel(int x, int y, int z)
 { 
@@ -150,7 +147,7 @@ void set_x_plane(int x)
     }
 }
 
-/* 
+/*
  * Clear all the LEDs on y and z for a given x. 
  */
 void clear_x_plane(int x)
@@ -201,7 +198,7 @@ void set_plane(unsigned char plane, int i, int state)
 	    clear_x_plane(i);
 	}
     }
-	
+
     if (plane == 'y') {
 	if (state > 0) {
 	    set_y_plane(i);
@@ -224,7 +221,7 @@ void set_plane(unsigned char plane, int i, int state)
  * Draw a line along the Z axis. If state = 0 then this clears a line of
  * voxels, and if state = 1 this sets a line of voxels. 
  */
-void line_z(int x, int y, int z1, int z2, int state)
+void set_z_line(int x, int y, int z1, int z2, int state)
 {
     int i;
 
@@ -243,7 +240,7 @@ void line_z(int x, int y, int z1, int z2, int state)
 /* 
  * Draw a line along the X axis. 
  */
-void line_x(int z, int y, int x1, int x2, int state)
+void set_x_line(int z, int y, int x1, int x2, int state)
 {
     int i;
 
@@ -262,7 +259,7 @@ void line_x(int z, int y, int x1, int x2, int state)
 /* 
  * Draw a line along the Y axis. 
  */
-void line_y(int z, int x, int y1, int y2, int state)
+void set_y_line(int z, int x, int y1, int y2, int state)
 {
     int i;
 
