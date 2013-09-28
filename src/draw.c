@@ -440,6 +440,10 @@ void fill(unsigned char pattern)
     }
 }
 
+
+// added this because the standard pow() funtion in math.h was
+// returning incorrectly.  pow(2,3) was returning 7 instead of 8
+// 
 int my_pow(int num, int exp)
 {
     if (exp == 2)
