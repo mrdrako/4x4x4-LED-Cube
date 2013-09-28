@@ -23,10 +23,12 @@ void set_plane(unsigned char, int, int);
 void set_z_line(int, int, int, int, int);
 void set_x_line(int, int, int, int, int);
 void set_y_line(int, int, int, int, int);
+void set_y_line_pattern(int, int, int, int);
 void draw_line_plane(int, int, int, int, unsigned char);
 void tmp_to_cube(void);
 void cube_to_tmp(void);
 void fill(unsigned char);
+int my_pow(int, int);
 
 
 /* 
@@ -256,8 +258,8 @@ void set_x_line(int z, int y, int x1, int x2, int state)
     }
 }
 
-/* 
- * Draw a line along the Y axis. 
+/*
+ * Draw a line along the Y axis.
  */
 void set_y_line(int z, int x, int y1, int y2, int state)
 {
@@ -275,7 +277,25 @@ void set_y_line(int z, int x, int y1, int y2, int state)
     }
 }
 
-/* 
+/*
+ * Draw a line pattern along the Y axis, arbitrary x and z axis.
+ */
+void set_y_line_pattern(int z, int x, int cubesize, int pattern)
+{
+    int i;
+    int mask;
+    
+    mask = my_pow(2,(cubesize-1)) ;
+    for (i = 0; i < cubesize; i++) {
+	alter_voxel(x, i, z, (pattern & mask)>0?1:0 );
+        mask /= 2;
+    }
+
+
+}
+
+
+/*
  * Draws a plane on any diagonal angle. The unsigned char anchor is the
  * plane that is constant. ("x","y", or "z"). 
  */
@@ -418,4 +438,12 @@ void fill(unsigned char pattern)
 	    cube[z][y] = pattern;
 	}
     }
+}
+
+int my_pow(int num, int exp)
+{
+    if (exp == 2)
+        return num*num;
+    else
+        return num*my_pow(num,exp-1);
 }
