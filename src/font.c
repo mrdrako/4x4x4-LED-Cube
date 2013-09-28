@@ -25,9 +25,14 @@
 // break when scrolling words
 #include <string.h>
 
+
+// need to redeclare this here, alternative is to pass it in the function call
+#define cubesize 4
+
 void scroll_char_x(const char, int, int);
 void scroll_string_x(const char*, int, int);
 void scroll_string_z(const char*, int, int);
+void scroll_string_y(const char*, int, int);
 int check_level(int);
 
 //95 printable ascii characters counting lowercase, upper, nums, and all punct
@@ -287,6 +292,58 @@ void scroll_string_z(const char* mystring, int delay, int level)
         cube[2][level] = pgm_read_byte(&font[(((int)mystring[y])-32)][3]);
         cube[1][level] = pgm_read_byte(&font[(((int)mystring[y])-32)][4]);
         cube[0][level] = pgm_read_byte(&font[(((int)mystring[y])-32)][5]);
+        delay_ms(delay);
+    }
+
+}
+
+// this will scroll a text string along the y axis
+// remember to add an extra space at the front or the back if it will repeat
+// or else the string will jam together
+//
+void scroll_string_y(const char* mystring, int delay, int level)
+{
+
+    int size;
+    int y;
+    size = strlen(mystring);
+    
+    if (!check_level(level))
+        level = 0;
+    
+    //use array
+    clear_y_plane(level);
+    for (y = 0; y < size; y++)
+    {
+        set_y_line_pattern(3, level, cubesize, 0);  //cube[level][3] = cube[level][2];
+        set_y_line_pattern(2, level, cubesize, 0);  //cube[level][2] = cube[level][1];
+        set_y_line_pattern(1, level, cubesize, 0);  //cube[level][1] = cube[level][0];
+        set_y_line_pattern(0, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][0]));  //cube[level][0] = pgm_read_byte(&font[(((int)mystring[y])-32)][0]);
+        delay_ms(delay);
+        set_y_line_pattern(3, level, cubesize, 0);  //cube[level][3] = cube[level][2];
+        set_y_line_pattern(2, level, cubesize, 0);  //cube[level][2] = cube[level][1];
+        set_y_line_pattern(1, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][0]));  //cube[level][1] = pgm_read_byte(&font[(((int)mystring[y])-32)][0]);
+        set_y_line_pattern(0, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][1]));  //cube[level][0] = pgm_read_byte(&font[(((int)mystring[y])-32)][1]);
+        delay_ms(delay);
+        set_y_line_pattern(3, level, cubesize, 0);  //cube[level][3] = cube[level][2];
+        set_y_line_pattern(2, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][0]));  //cube[level][2] = pgm_read_byte(&font[(((int)mystring[y])-32)][0]);
+        set_y_line_pattern(1, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][1]));  //cube[level][1] = pgm_read_byte(&font[(((int)mystring[y])-32)][1]);
+        set_y_line_pattern(0, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][2]));  //cube[level][0] = pgm_read_byte(&font[(((int)mystring[y])-32)][2]);
+        delay_ms(delay);
+        set_y_line_pattern(3, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][0]));  //cube[level][3] = pgm_read_byte(&font[(((int)mystring[y])-32)][0]);
+        set_y_line_pattern(2, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][1]));  //cube[level][2] = pgm_read_byte(&font[(((int)mystring[y])-32)][1]);
+        set_y_line_pattern(1, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][2]));  //cube[level][1] = pgm_read_byte(&font[(((int)mystring[y])-32)][2]);
+        set_y_line_pattern(0, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][3]));  //cube[level][0] = pgm_read_byte(&font[(((int)mystring[y])-32)][3]);
+        delay_ms(delay);
+        set_y_line_pattern(3, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][1]));  //cube[level][3] = pgm_read_byte(&font[(((int)mystring[y])-32)][1]);
+        set_y_line_pattern(2, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][2]));  //cube[level][2] = pgm_read_byte(&font[(((int)mystring[y])-32)][2]);
+        set_y_line_pattern(1, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][3]));  //cube[level][1] = pgm_read_byte(&font[(((int)mystring[y])-32)][3]);
+        set_y_line_pattern(0, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][4]));  //cube[level][0] = pgm_read_byte(&font[(((int)mystring[y])-32)][4]);
+        delay_ms(delay);
+        set_y_line_pattern(3, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][2]));  //cube[level][3] = pgm_read_byte(&font[(((int)mystring[y])-32)][2]);
+        set_y_line_pattern(2, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][3]));  //cube[level][2] = pgm_read_byte(&font[(((int)mystring[y])-32)][3]);
+        set_y_line_pattern(1, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][4]));  //cube[level][1] = pgm_read_byte(&font[(((int)mystring[y])-32)][4]);
+        set_y_line_pattern(0, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][5]));  //cube[level][0] = pgm_read_byte(&font[(((int)mystring[y])-32)][5]);
         delay_ms(delay);
     }
 
