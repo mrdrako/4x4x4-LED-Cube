@@ -315,17 +315,17 @@ void scroll_string_y(const char* mystring, int delay, int level)
     clear_y_plane(level);
     for (y = 0; y < size; y++)
     {
-        set_y_line_pattern(3, level, cubesize, 0);
-        set_y_line_pattern(2, level, cubesize, 0);  
-        set_y_line_pattern(1, level, cubesize, 0);
+        set_y_line_pattern(3, level, cubesize, y==0?0:pgm_read_byte(&font[(((int)mystring[y-1])-32)][3]));  //scroll previous letter if exists
+        set_y_line_pattern(2, level, cubesize, y==0?0:pgm_read_byte(&font[(((int)mystring[y-1])-32)][4]));
+        set_y_line_pattern(1, level, cubesize, y==0?0:pgm_read_byte(&font[(((int)mystring[y-1])-32)][5]));
         set_y_line_pattern(0, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][0]));
         delay_ms(delay);
-        set_y_line_pattern(3, level, cubesize, 0);
-        set_y_line_pattern(2, level, cubesize, 0);
+        set_y_line_pattern(3, level, cubesize, y==0?0:pgm_read_byte(&font[(((int)mystring[y-1])-32)][4]));
+        set_y_line_pattern(2, level, cubesize, y==0?0:pgm_read_byte(&font[(((int)mystring[y-1])-32)][5]));
         set_y_line_pattern(1, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][0]));  
         set_y_line_pattern(0, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][1]));  
         delay_ms(delay);
-        set_y_line_pattern(3, level, cubesize, 0);
+        set_y_line_pattern(3, level, cubesize, y==0?0:pgm_read_byte(&font[(((int)mystring[y-1])-32)][5]));
         set_y_line_pattern(2, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][0]));  
         set_y_line_pattern(1, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][1]));  
         set_y_line_pattern(0, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][2]));  
