@@ -12,7 +12,7 @@ void spinning_plane(int direction, int iterations, int delay);
 void spinning_square(int direction, int iterations, int delay);
 void rain(int iterations, int delay, int hold, int speed);
 void send_voxel_z(unsigned char x, unsigned char y, unsigned char z, int delay);
-void send_plane_rand_z(unsigned char z, int delay, int wait);
+void send_plane_rand_z(int direction, int delay, int wait);
 void blinky(void);
 void blinky2(void);
 void fly_plane(unsigned char plane,unsigned char direction, int delay);
@@ -173,16 +173,22 @@ void send_voxel_z(unsigned char x, unsigned char y, unsigned char z, int delay)
  * Send all the voxels from one side of the cube to the other. Start at z
  * and send to the opposite side. Sends in random order.
  */
-void send_plane_rand_z(unsigned char z, int delay, int wait)
+void send_plane_rand_z(int direction, int delay, int wait)
 {
     unsigned char loop = 16;
     unsigned char x;
     unsigned char y;
+    int z;
+    
+    if (direction == 0)  //up
+        z = 0;
+    else
+        z = 3;          //down
 
     fill(0x00);
 
     set_z_plane(z);
-	
+
     /* Send voxels at random untill all 16 have crossed the cube. */
     while(loop) {
 	x = rand() % 4;
