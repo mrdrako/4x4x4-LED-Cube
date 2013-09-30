@@ -1,4 +1,4 @@
-/* 
+/*
  * 4x4x4 LED Cube project
  * By Christian Moen 2008
  * chr@syntaks.org
@@ -62,10 +62,12 @@ void spinning_plane(int direction, int iterations, int delay)
 {
     int i;
     int z;
+    int x;
+    x = (iterations%6)*6;   //forces complete loops of lines without jumps
 
-    for (i = 0; i < iterations; ++i) {
+    for (i = 0; i < x; i++) {
 	/* Loop cube levels. */
-	for (z = 0;z < 4; ++z) {
+	for (z = 0; z < 4; z++) {
 	    cube[z][0] = (pgm_read_byte(&spinning_line[(i) % 6][0]) >> 4);
 	    cube[z][1] = pgm_read_byte(&spinning_line[(i) % 6][0]);
 	    cube[z][2] = (pgm_read_byte(&spinning_line[(i) % 6][1]) >> 4);
@@ -82,10 +84,12 @@ void spinning_square(int direction, int iterations, int delay)
 {
     int i;
     int z;
+    int x;
+    x = (iterations%6)*6;   //forces complete loops of lines without jumps
 
-    for (i = 0; i < iterations; ++i) {
+    for (i = 0; i < x; i++) {
 	/* Loop cube levels. */
-	for (z = 0; z < 4; ++z) {
+	for (z = 0; z < 4; z++) {
 	    cube[z][0] = (pgm_read_byte(&spinning_line[(i) % 6][0]) >> 4);
 	    cube[z][1] = pgm_read_byte(&spinning_line[(i) % 6][0]);
 	    cube[z][2] = (pgm_read_byte(&spinning_line[(i) % 6][1]) >> 4);
