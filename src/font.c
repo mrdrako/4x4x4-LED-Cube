@@ -353,6 +353,7 @@ void scroll_string_x(const char* mystring, int delay, int level)
         cube[level][0] = pgm_read_byte(&font[(((int)mystring[y])-32)][2]);
         delay_ms(delay);
     }
+    clear_x_plane(level);
 
 }
 
@@ -406,6 +407,7 @@ void scroll_string_z(const char* mystring, int delay, int level)
         cube[0][level] = pgm_read_byte(&font[(((int)mystring[y])-32)][2]);
         delay_ms(delay);
     }
+    clear_z_plane(level);
 
 }
 
@@ -459,5 +461,6 @@ void scroll_string_y(const char* mystring, int delay, int level)
         set_y_line_pattern(0, level, cubesize, pgm_read_byte(&font[(((int)mystring[y])-32)][2]));
         delay_ms(delay);
     }
+    clear_y_plane(level);
 
 }
