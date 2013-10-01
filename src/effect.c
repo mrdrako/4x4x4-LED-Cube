@@ -7,9 +7,9 @@
  * Graphic effects
  */
 
-void spiral(int direction, int iterations, int delay);
-void spinning_plane(int direction, int iterations, int delay);
-void spinning_square(int direction, int iterations, int delay);
+void spiral(int iterations, int delay);
+void spinning_plane(int iterations, int delay);
+void spinning_square(int iterations, int delay);
 void rain(int iterations, int delay, int hold, int speed);
 void send_voxel_z(unsigned char x, unsigned char y, unsigned char z, int delay);
 void send_plane_rand_z(int direction, int delay, int wait);
@@ -34,7 +34,7 @@ void expanding_square(int iterations, int delay);
 /*
  * Shows an animation of a spinning spiral.
  */
-void spiral(int direction, int iterations, int delay)
+void spiral(int iterations, int delay)
 {
     int i;
     int z;
@@ -59,14 +59,14 @@ void spiral(int direction, int iterations, int delay)
 /*
  * Shows an animation of a spinning plane.
  */
-void spinning_plane(int direction, int iterations, int delay)
+void spinning_plane(int iterations, int delay)
 {
     int i;
     int z;
     int x;
     x = (iterations%6)*6;   //forces complete loops of lines without jumps
 
-    for (i = 0; i < x; i++) {
+    for (i = 0; i < iterations; i++) {
 	/* Loop cube levels. */
 	for (z = 0; z < 4; z++) {
 	    cube[z][0] = (pgm_read_byte(&spinning_line[(i) % 6][0]) >> 4);
@@ -81,14 +81,14 @@ void spinning_plane(int direction, int iterations, int delay)
 /*
  * Shows an animation of a spinning square.
  */
-void spinning_square(int direction, int iterations, int delay)
+void spinning_square(int iterations, int delay)
 {
     int i;
     int z;
     int x;
     x = (iterations%6)*6;   //forces complete loops of lines without jumps
 
-    for (i = 0; i < x; i++) {
+    for (i = 0; i < iterations; i++) {
 	/* Loop cube levels. */
 	for (z = 0; z < 4; z++) {
 	    cube[z][0] = (pgm_read_byte(&spinning_line[(i) % 6][0]) >> 4);
@@ -775,35 +775,44 @@ void boing_boing(uint16_t iterations, int delay, unsigned char mode,
 //
 void expanding_square(int iterations, int delay)
 {
-    int y, z;
+    int x, y, z;
 
     fill(0x00);
-    
-    for (z=1; z<3; z++) {
-        for (y=1; y<3; y++) {
-            cube[z][y] = 0x6;
-        }
-    }
-
-    delay_ms(delay);
-
-    for (z=0; z<=3; z++) {
-        for (y=0; y<=3; y++) {
-            if (z==0 || z == 3) {
-                if (y == 0 || y == 3)
-                    cube[z][y] = 0xf;
-                else 
-                    cube[z][y] = 0x9;
-            }
-            else if (z==1 || z==2) {
-                if (y == 0 || y == 3)
-                    cube[z][y] = 0x9;
+    for (x=0; x<iterations; x++)
+    {
+        for (z=0; z<4; z++) {
+            for (y=0; y<4; y++) {
+                if (z==1 || z == 2) {
+                    if (y == 1 || y == 2)
+                        cube[z][y] = 0x6;
+                    else
+                        cube[z][y] = 0x0;
+                }
                 else
                     cube[z][y] = 0x0;
             }
         }
+    
+        delay_ms(delay);
+    
+        for (z=0; z<4; z++) {
+            for (y=0; y<4; y++) {
+                if (z==0 || z == 3) {
+                    if (y == 0 || y == 3)
+                        cube[z][y] = 0xf;
+                    else 
+                        cube[z][y] = 0x9;
+                }
+                else if (z==1 || z==2) {
+                    if (y == 0 || y == 3)
+                        cube[z][y] = 0x9;
+                    else
+                        cube[z][y] = 0x0;
+                }
+            }
+        }
+    
+        delay_ms(delay);
     }
-
-    delay_ms(delay);
 
 }
