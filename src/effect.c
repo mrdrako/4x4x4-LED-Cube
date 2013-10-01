@@ -28,6 +28,7 @@ void flip_playback(int delay, unsigned char flip_x, unsigned char flip_y,
 void boing_boing(uint16_t iterations, int delay, unsigned char mode, 
 		 unsigned char drawmode);
 void random_walk(int walkers, int iterations, int delay);
+void expanding_square(int iterations, int delay);
 
 
 /*
@@ -767,4 +768,42 @@ void boing_boing(uint16_t iterations, int delay, unsigned char mode,
 	}
 	iterations--;
     }
+}
+
+
+// grows a square from the inner box to the outer box
+//
+void expanding_square(int iterations, int delay)
+{
+    int y, z;
+
+    fill(0x00);
+    
+    for (z=1; z<3; z++) {
+        for (y=1; y<3; y++) {
+            cube[z][y] = 0x6;
+        }
+    }
+
+    delay_ms(delay);
+
+    for (z=0; z<=3; z++) {
+        for (y=0; y<=3; y++) {
+            if (z==0 || z == 3) {
+                if (y == 0 || y == 3)
+                    cube[z][y] = 0xf;
+                else 
+                    cube[z][y] = 0x9;
+            }
+            else if (z==1 || z==2) {
+                if (y == 0 || y == 3)
+                    cube[z][y] = 0x9;
+                else
+                    cube[z][y] = 0x0;
+            }
+        }
+    }
+
+    delay_ms(delay);
+
 }
