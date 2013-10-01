@@ -64,9 +64,9 @@ void spinning_plane(int iterations, int delay)
     int i;
     int z;
     int x;
-    x = (iterations%6)*6;   //forces complete loops of lines without jumps
+    x = iterations*6;
 
-    for (i = 0; i < iterations; i++) {
+    for (i = 0; i < x; i++) {  //this needs to be a (multiple of 6)+1 for a complete rotation
 	/* Loop cube levels. */
 	for (z = 0; z < 4; z++) {
 	    cube[z][0] = (pgm_read_byte(&spinning_line[(i) % 6][0]) >> 4);
@@ -86,9 +86,9 @@ void spinning_square(int iterations, int delay)
     int i;
     int z;
     int x;
-    x = (iterations%6)*6;   //forces complete loops of lines without jumps
+    x = iterations*6;
 
-    for (i = 0; i < iterations; i++) {
+    for (i = 0; i <= x; i++) {  //this needs to be a (multiple of 6)+1 for a complete rotation
 	/* Loop cube levels. */
 	for (z = 0; z < 4; z++) {
 	    cube[z][0] = (pgm_read_byte(&spinning_line[(i) % 6][0]) >> 4);
